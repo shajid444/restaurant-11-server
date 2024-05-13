@@ -32,7 +32,7 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-        const foodCollection = client.db('Restaurant').collection('foodItem');
+        const foodCollection = client.db('Restaurant').collection('foodItems');
 
         app.get('/foods', async (req, res) => {
 

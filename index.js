@@ -34,18 +34,20 @@ async function run() {
 
         const foodCollection = client.db('Restaurant').collection('foodItems');
         const personalCollection = client.db('Restaurant').collection('personalPurchase');
+        const userCollection = client.db('Restaurant').collection('user');
+
 
         app.get('/foods', async (req, res) => {
 
-            const query = { quantity: { $gt: 0 }};
+            const query = { quantity: { $gt: 0 } };
 
-           
+
             const options = {
                 // Sort returned documents in ascending order by title (A->Z)
                 sort: { quantity: -1 },
-            
-              };
-              const cursor = foodCollection.find(query, options);
+
+            };
+            const cursor = foodCollection.find(query, options);
             const result = await cursor.toArray();
             res.send(result);
 
@@ -59,11 +61,11 @@ async function run() {
         })
 
 
+        // --------------------------------------------------------
+        // personal purchase collection api
 
-        // personal collection api
-        
         app.get('/purchase', async (req, res) => {
-              const cursor = personalCollection.find();
+            const cursor = personalCollection.find();
 
             const result = await cursor.toArray();
 
@@ -77,6 +79,30 @@ async function run() {
             const result = await personalCollection.insertOne(p);
             res.send(result);
         })
+
+
+        // -----------------------------------------------------------
+
+
+        // userCollection
+
+        app.get('/user', async (req, res) => {
+            const cursor = userCollection.find();
+
+            const result = await cursor.toArray();
+
+            res.send(result);
+
+        })
+
+        app.post('/user', async (req, res) => {
+            const p = req.body;
+            console.log(p);
+            const result = await userCollection.insertOne(p);
+            res.send(result);
+        })
+        // end user collection api
+        //   -------------------------------
 
 
 

@@ -31,10 +31,14 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
+        // food item
 
         const foodCollection = client.db('Restaurant').collection('foodItems');
+        // added by user
         const personalCollection = client.db('Restaurant').collection('personalPurchase');
+        // user information
         const userCollection = client.db('Restaurant').collection('user');
+        // add food item by user
         const addFood = client.db('Restaurant').collection('addedFood');
 
 
@@ -54,6 +58,7 @@ async function run() {
 
         })
 
+        // find single food
         app.get('/foods/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
@@ -80,6 +85,7 @@ async function run() {
             const result = await personalCollection.insertOne(p);
             res.send(result);
         })
+        // delete operation
 
         app.delete('/purchase/:id', async (req, res) => {
 

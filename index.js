@@ -35,6 +35,7 @@ async function run() {
         const foodCollection = client.db('Restaurant').collection('foodItems');
         const personalCollection = client.db('Restaurant').collection('personalPurchase');
         const userCollection = client.db('Restaurant').collection('user');
+        const addFood = client.db('Restaurant').collection('addedFood');
 
 
         app.get('/foods', async (req, res) => {
@@ -103,6 +104,66 @@ async function run() {
         })
         // end user collection api
         //   -------------------------------
+        // added food api
+
+        app.get('/addFood', async (req, res) => {
+            const cursor = addFood.find();
+
+            const result = await cursor.toArray();
+
+            res.send(result);
+
+        })
+
+        app.get('/addFood/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await addFood.findOne(query);
+            res.send(result);
+        })
+
+        app.post('/addFood', async (req, res) => {
+            const p = req.body;
+            console.log(p);
+            const result = await addFood.insertOne(p);
+            res.send(result);
+        })
+
+
+        
+        app.put('/addFood/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+            const updateFood = req.body;
+            const food = {
+                $set: {
+                    photo: updateFood.photo,
+                    food_name: updateFood.food_name,
+                    country_name: updateFood.country_name,
+                    food_catagory: updateFood.food_catagory,
+                    quantity: updateFood.quantity,
+                    shortDescription: updateFood.shortDescription,
+                    price: updateFood.price
+                    
+
+                }
+            }
+
+            const result = await addFood.updateOne(filter, food, options);
+            res.send(result);
+
+
+        })
+
+
+
+
+
+
+
+
+        // -------------------------------------
 
 
 
